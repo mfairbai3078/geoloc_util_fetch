@@ -112,8 +112,9 @@ def get_location_data(api_key,locations: List[str]) -> List[Dict]:
 
 def main():
     parser = argparse.ArgumentParser(description="Fetch geolocation data for cities/states or zip codes.")
-    parser.add_argument("locations", nargs="+", help="List of city/state or zip codes (e.g., 'Madison, WI' '12345').")
     parser.add_argument("--api-key", help="API Key for the OpenWeather Geocoding API", default=None)
+    parser.add_argument("--locations", action="store_true", help="List of city/state or zip code locations", required=False)
+    parser.add_argument("locations", nargs="+", help="List of city/state or zip codes (e.g., 'Madison, WI' '12345').")
     args = parser.parse_args()
 
     api_key = get_api_key(args)
