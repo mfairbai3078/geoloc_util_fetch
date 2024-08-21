@@ -24,16 +24,13 @@ def get_api_key(args) -> str:
     Retrieve the OpenWeather API key from environment variables.
     """
     if args.api_key:
-        api_key=args.api_key
+        api_key = args.api_key
     else:
         api_key = os.getenv('API_KEY')
     if not api_key:
         logging.error("API_KEY environment variable not found or not specified on commandline.")
         raise EnvironmentError("API_KEY not found in environment variables or not specified on commandline.")
     return api_key
-
-
-
 
 
 def fetch_location_by_city_state(city_state: str, api_key: str) -> Dict:
@@ -118,7 +115,7 @@ def main():
     args = parser.parse_args()
 
     api_key = get_api_key(args)
-    results = get_location_data(api_key,args.locations )
+    results = get_location_data(api_key,args.locations)
     for result in results:
         print("-" * 80)
         print(f"Input: {result['input']}")
