@@ -77,7 +77,7 @@ def fetch_location_by_zip(zip_code: str, api_key: str) -> Dict:
         raise ValueError(f"Could not retrieve location data for {zip_code}.")
 
 
-def get_location_data(api_key,locations: List[str]) -> List[Dict]:
+def get_location_data(api_key, locations: List[str]) -> List[Dict]:
     """
     Get geolocation data for multiple locations.
 
@@ -115,7 +115,7 @@ def main():
     args = parser.parse_args()
 
     api_key = get_api_key(args)
-    results = get_location_data(api_key,args.locations)
+    results = get_location_data(api_key, args.locations)
     for result in results:
         print("-" * 80)
         print(f"Input: {result['input']}")

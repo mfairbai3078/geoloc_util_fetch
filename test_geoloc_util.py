@@ -5,7 +5,6 @@ __email__ = "fairbairn.matthew@gmail.com"
 __status__ = "Demo"
 import pytest
 import os
-import requests
 from unittest.mock import patch, MagicMock
 from geoloc_util import get_api_key, fetch_location_by_city_state, fetch_location_by_zip, get_location_data
 
