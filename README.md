@@ -46,7 +46,7 @@ This command-line utility fetches geographical information (latitude, longitude,
 You can run the script directly from the command line. Provide the locations as arguments and optionally specify an API key:
 
 ```bash
-python geoloc-util.py "Madison, WI" "12345" --api-key YOUR_API_KEY
+python geoloc_util.py "Madison, WI" "12345" --api-key YOUR_API_KEY
 ```
 You can also specify the API key via the command line:
 
