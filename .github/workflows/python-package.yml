@@ -37,5 +37,5 @@ jobs:
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     - name: Test with pytest and get coverage report
       run: |
-        pytest --cov -v >> $GITHUB_STEP_SUMMARY
+        pytest --cov  --cov-branch --cov-report=term-missing -v >> $GITHUB_STEP_SUMMARY
       
