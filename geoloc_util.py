@@ -41,9 +41,13 @@ def fetch_location_by_city_state(city_state: str, api_key: str) -> Dict:
     :param api_key: The API key for the OpenWeather API
     :return: A dictionary with geolocation data
     """
-    city, state = city_state.split(", ")
+    if len(city_state.split(','))==3:
+        country_code=city_state.split(',')[-1]
+    else:
+        country_code = "US"
+    city, state = city_state.split(", ")[:2]
     params = {
-        "q": f"{city},{state},US",
+        "q": f"{city},{state},{country_code}",
         "appid": api_key,
         "limit": 1  # Return only the first result
     }
@@ -64,8 +68,15 @@ def fetch_location_by_zip(zip_code: str, api_key: str) -> Dict:
     :param api_key: The API key for the OpenWeather API
     :return: A dictionary with geolocation data
     """
-    params = {
-        "zip": f"{zip_code},US",
+    if len(zip_code.split(','))==2:
+        country_code=zip_code.split(',')[-1]
+        zip=zip_code.split(',')[0]
+    else:
+        country_code = "US"
+        zip = zip_code
+
+    params= {
+        "zip": f"{zip},{country_code}",
         "appid": api_key
     }
     response = requests.get(API_URL_ZIP_CODE, params=params)
@@ -90,7 +101,7 @@ def get_location_data(api_key, locations: List[str]) -> List[Dict]:
 
     for location in locations:
         try:
-            if "," in location:  # City/State input
+            if location.split(',')[0].isalpha():  # City/State input
                 data = fetch_location_by_city_state(location, api_key)
             else:  # Zip code input
                 data = fetch_location_by_zip(location, api_key)
