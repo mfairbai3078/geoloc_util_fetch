@@ -41,11 +41,11 @@ def fetch_location_by_city_state(city_state: str, api_key: str) -> Dict:
     :param api_key: The API key for the OpenWeather API
     :return: A dictionary with geolocation data
     """
-    if len(city_state.split(','))==3:
-        country_code=city_state.split(',')[-1]
+    if len(city_state.split(',')) == 3:
+        country_code = city_state.split(',')[-1]
     else:
         country_code = "US"
-    city, state = city_state.split(", ")[:2]
+    city, state = city_state.split(",")[:2]
     params = {
         "q": f"{city},{state},{country_code}",
         "appid": api_key,
@@ -68,14 +68,14 @@ def fetch_location_by_zip(zip_code: str, api_key: str) -> Dict:
     :param api_key: The API key for the OpenWeather API
     :return: A dictionary with geolocation data
     """
-    if len(zip_code.split(','))==2:
+    if len(zip_code.split(',')) == 2:
         country_code=zip_code.split(',')[-1]
-        zip=zip_code.split(',')[0]
+        zip = zip_code.split(',')[0]
     else:
         country_code = "US"
         zip = zip_code
 
-    params= {
+    params = {
         "zip": f"{zip},{country_code}",
         "appid": api_key
     }

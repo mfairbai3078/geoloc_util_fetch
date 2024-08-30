@@ -36,7 +36,7 @@ def invalid_api_key():
 
 @pytest.fixture
 def mock_args():
-    return MagicMock(api_key=None, locations=["Madison, WI", "12345"])
+    return MagicMock(api_key=None, locations=["Madison, WI", "12345","80129,US", "Portchester,England,GB"])
 
 
 # Test get_api_key function
@@ -64,6 +64,13 @@ def test_fetch_location_by_city_state_success(mock_get, valid_api_key):
     result = fetch_location_by_city_state("Madison, WI", valid_api_key)
     assert result == mock_city_state_response[0]
 
+# Test fetch_location_by_international_city_state function
+@patch('geoloc_util.requests.get')
+def test_fetch_location_by_international_city_state_success(mock_get, valid_api_key):
+    mock_get.return_value.status_code = 200
+    mock_get.return_value.json.return_value = mock_city_state_response
+    result = fetch_location_by_city_state("Portsmouth,England,GB", valid_api_key)
+    assert result == mock_city_state_response[0]
 
 @patch('geoloc_util.requests.get')
 def test_fetch_location_by_city_state_failure(mock_get, valid_api_key):
@@ -81,6 +88,13 @@ def test_fetch_location_by_zip_success(mock_get, valid_api_key):
     result = fetch_location_by_zip("12345", valid_api_key)
     assert result == mock_zip_response
 
+# Test fetch_location_by_zip function
+@patch('geoloc_util.requests.get')
+def test_fetch_location_by_international_zip_success(mock_get, valid_api_key):
+    mock_get.return_value.status_code = 200
+    mock_get.return_value.json.return_value = mock_zip_response
+    result = fetch_location_by_zip("12345,GB", valid_api_key)
+    assert result == mock_zip_response
 
 @patch('geoloc_util.requests.get')
 def test_fetch_location_by_zip_failure(mock_get, valid_api_key):
@@ -97,13 +111,15 @@ def test_get_location_data(mock_fetch_zip, mock_fetch_city_state, valid_api_key,
     mock_fetch_city_state.return_value = mock_city_state_response[0]
     mock_fetch_zip.return_value = mock_zip_response
     results = get_location_data(valid_api_key, mock_args.locations)
-    assert len(results) == 2
+    assert len(results) == 4
     assert results[0]["input"] == "Madison, WI"
     assert results[0]["latitude"] == 43.0731
     assert results[0]["longitude"] == -89.4012
+    assert results[0]["place_name"] == "Denver"
     assert results[1]["input"] == "12345"
     assert results[1]["latitude"] == 40.7128
     assert results[1]["longitude"] == -74.0060
+    assert results[2]["input"] == "80129,US"
 
 
 # Test exception handling in get_location_data
@@ -113,5 +129,5 @@ def test_get_location_data_with_errors(mock_fetch_zip, mock_fetch_city_state, va
     mock_fetch_city_state.side_effect = ValueError("Could not retrieve location data for Madison, WI")
     mock_fetch_zip.return_value = mock_zip_response
     results = get_location_data(valid_api_key, mock_args.locations)
-    assert len(results) == 1  # Only the zip code data should be returned
+    assert len(results) == 2  # Only the zip code data should be returned
     assert results[0]["input"] == "12345"
